@@ -43,7 +43,8 @@
 | 5 | [07 - Security: firewalld และ SELinux](docs/07-security.md) | firewall-cmd, context, boolean, port |
 | 6 | [08 - Boot และ Troubleshooting](docs/08-boot-troubleshooting.md) | reset root password, target, GRUB |
 | เสริม | [09 - Containers (Podman)](docs/09-containers.md) | ไม่อยู่ใน objectives ของ RHEL 10 แล้ว อ่านเพิ่มได้ถ้ามีเวลา หรือจะต่อ RHCE |
-| 7–8 | [ข้อสอบจำลอง](exam/mock-exam.md) / [เฉลย](exam/solutions.md) | ทำจับเวลา 3 ชั่วโมง |
+| 7 | [ข้อสอบจำลองชุดที่ 1](exam/mock-exam.md) / [เฉลย](exam/solutions.md) | ทำจับเวลา 3 ชั่วโมง แล้วรัน `exam/check-servera.sh` |
+| 8 | [ข้อสอบจำลองชุดที่ 2](exam/mock-exam-2.md) / [เฉลย](exam/solutions-2.md) | ยากขึ้น มีปัญหาซ่อนไว้ (เตรียมด้วย `exam/setup-exam2.sh`) ตรวจด้วย `exam/check-exam2-servera.sh` และ `exam/check-exam2-serverb.sh` |
 
 มี [Cheat Sheet](docs/cheatsheet.md) สรุปคำสั่งสำคัญไว้ทบทวนก่อนสอบด้วย
 
