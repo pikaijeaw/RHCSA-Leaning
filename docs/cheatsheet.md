@@ -65,17 +65,30 @@ find / -user u -type f -exec cp -a {} /dest/ \; 2>/dev/null
 grep pattern file > out
 tar -cjf x.tar.bz2 dir   (z=gzip j=bzip2 J=xz)
 
-# Containers
-podman generate systemd --name c --files --new ; systemctl --user enable --now container-c
+# Flatpak (ใหม่ใน RHEL 10)
+flatpak remote-add --if-not-exists NAME URL.flatpakrepo ; flatpak remotes
+flatpak install -y NAME app.id ; flatpak list --app ; flatpak uninstall -y app.id ; flatpak uninstall --unused
+
+# systemd timer
+/etc/systemd/system/x.service : [Service] Type=oneshot / ExecStart=/bin/bash -c '...'
+/etc/systemd/system/x.timer   : [Timer] OnCalendar=Mon..Fri *-*-* 08:30:00 / Persistent=true
+                                [Install] WantedBy=timers.target
+systemctl daemon-reload ; systemctl enable --now x.timer ; systemctl list-timers
+systemd-analyze calendar "Mon..Fri *-*-* 08:30:00"
+
+# Containers (บทเสริม ไม่อยู่ใน objectives RHEL 10)
+~/.config/containers/systemd/c.container ; systemctl --user daemon-reload ; systemctl --user start c
 loginctl enable-linger user
 ```
 
 ## man page ที่มีตัวอย่างดี ๆ
-`man nmcli-examples` · `man 5 fstab` · `man semanage-fcontext` · `man semanage-port` · `man firewalld.richlanguage` · `man 5 crontab` · `man auto.master` · `man 5 autofs` · `man lvcreate` · `man podman-generate-systemd` · `man systemd.timer`
+`man nmcli-examples` · `man 5 fstab` · `man semanage-fcontext` · `man semanage-port` · `man firewalld.richlanguage` · `man 5 crontab` · `man auto.master` · `man 5 autofs` · `man lvcreate` · `man systemd.timer` · `man systemd.time` · `man flatpak-remote-add` · `man flatpak-install`
 
 ## Checklist ก่อนส่งข้อสอบ
 - [ ] `findmnt --verify` ไม่มี error และ `mount -a` ผ่าน
 - [ ] `getenforce` = Enforcing และ `/etc/selinux/config` = enforcing
 - [ ] ทุก service ที่โจทย์สั่ง `systemctl is-enabled` = enabled
 - [ ] firewall ใช้ `--permanent` แล้ว
+- [ ] timer ที่สร้างอยู่ใน `systemctl list-timers` และ enable แล้ว
+- [ ] แอป Flatpak ติดตั้งแบบ system (ไม่ใช่ `--user`) ถ้าโจทย์ไม่ได้สั่งอย่างอื่น
 - [ ] Reboot ทั้งสองเครื่อง แล้วตรวจซ้ำทุกข้อ

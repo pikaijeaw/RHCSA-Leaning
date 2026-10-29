@@ -52,6 +52,13 @@ touch /.autorelabel
 exec /sbin/init        # หรือ /usr/sbin/reboot -f
 ```
 
+### ข้อสังเกตสำหรับ RHEL 10
+
+- **ลบ `console=...` ทุกตัวออกจากบรรทัด `linux`** ก่อนกด `Ctrl+x` ใน RHEL 10 มีรายงานว่าถ้าไม่ลบ จะไม่เห็น prompt `switch_root:/#` บนหน้าจอ เหมือนเครื่องค้าง
+- ถ้า `rd.break` ไม่ได้ prompt ให้ลองวิธีที่ 2 (`init=/bin/bash`) ทั้งสองวิธีใช้ได้ ผลลัพธ์เหมือนกัน
+- ถ้า root filesystem เข้ารหัสด้วย LUKS ระบบจะถาม passphrase ก่อน
+- ถ้าตอนติดตั้งไม่ได้เปิด root account เครื่องจะเข้า emergency/rescue mode ไม่ได้ (ขึ้นว่า root account is locked) แต่ `rd.break` และ `init=/bin/bash` ยังใช้ได้ เพราะไม่ถาม password
+
 ---
 
 ## 3. Rescue และ Emergency target
@@ -83,7 +90,7 @@ reboot
 ## 4. ตั้งค่า GRUB ถาวร
 
 ```bash
-# วิธีแนะนำบน RHEL 9: grubby
+# วิธีแนะนำบน RHEL 10: grubby
 grubby --default-kernel
 grubby --info=ALL | grep -E 'kernel|args'
 grubby --update-kernel=ALL --args="quiet"

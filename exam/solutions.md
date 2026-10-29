@@ -219,6 +219,46 @@ visudo -c
 su - natasha -c "sudo -n id -u"       # ต้องได้ 0
 ```
 
+### B16. Flatpak
+```bash
+dnf install -y flatpak
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak install -y flathub org.gnome.TextEditor     # รันเป็น root = ติดตั้งแบบ system
+flatpak list --app --columns=application,installation   # ต้องเห็น system
+```
+> ห้ามใส่ `--user` เพราะโจทย์ต้องการให้ทุก user ใช้ได้
+
+### B17. systemd timer
+```bash
+cat > /etc/systemd/system/diskreport.service <<'EOF'
+[Unit]
+Description=Disk usage report
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c '/usr/bin/df -h > /root/diskreport.txt'
+EOF
+
+cat > /etc/systemd/system/diskreport.timer <<'EOF'
+[Unit]
+Description=Disk report on weekdays at 08:30
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 08:30:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
+
+systemctl daemon-reload
+systemctl enable --now diskreport.timer
+systemctl list-timers diskreport.timer
+systemctl start diskreport.service && cat /root/diskreport.txt   # ทดสอบ
+```
+- `Persistent=true` = ถ้าเครื่องปิดอยู่ตอนถึงเวลา ให้รันทันทีที่เปิดเครื่อง
+- ต้องห่อด้วย `/bin/bash -c` เพราะ `ExecStart` ไม่ได้รันผ่าน shell จึงใช้ `>` ตรง ๆ ไม่ได้
+
 ---
 
 ## สุดท้าย

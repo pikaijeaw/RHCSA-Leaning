@@ -11,8 +11,11 @@
 | DNS (แปลชื่อเป็น IP) | `192.168.122.1` | `cat /etc/resolv.conf` |
 | Hostname | `servera.lab.example.com` | `hostnamectl` |
 
-ใน RHEL 9 network ถูกจัดการโดย **NetworkManager** การตั้งค่าแต่ละชุดเรียกว่า **connection** (profile) ซึ่งผูกกับ **device** (การ์ดแลน เช่น `enp1s0`, `eth0`)
-ไฟล์ตั้งค่าเก็บที่ `/etc/NetworkManager/system-connections/*.nmconnection`
+ใน RHEL 10 network ถูกจัดการโดย **NetworkManager** การตั้งค่าแต่ละชุดเรียกว่า **connection** (profile) ซึ่งผูกกับ **device** (การ์ดแลน เช่น `enp1s0`, `eth0`)
+ไฟล์ตั้งค่าเก็บแบบ **keyfile** ที่ `/etc/NetworkManager/system-connections/*.nmconnection`
+
+> ไฟล์แบบเก่า `/etc/sysconfig/network-scripts/ifcfg-*` ไม่ควรใช้แล้วใน RHEL 10 ให้ตั้งค่าผ่าน `nmcli` หรือ `nmtui` เสมอ
+> ถ้าเจอ connection แบบ ifcfg เหลืออยู่ แปลงเป็น keyfile ได้ด้วย `nmcli connection migrate`
 
 ---
 

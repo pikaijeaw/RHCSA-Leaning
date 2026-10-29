@@ -1,5 +1,5 @@
 #!/bin/bash
-# ตรวจผลข้อสอบจำลองชุดที่ 1 ส่วน B บน servera (รันเป็น root หลัง reboot)
+# ตรวจผลข้อสอบจำลองชุดที่ 1 (RHEL 10) ส่วน B บน servera (รันเป็น root หลัง reboot)
 # usage: bash check-servera.sh
 
 PASS=0
@@ -77,6 +77,17 @@ check "myusers /bin/bash แสดง natasha" bash -c "/usr/local/bin/myusers /
 echo "== B15 =="
 check "PASS_MAX_DAYS = 20" bash -c "grep -Eq '^PASS_MAX_DAYS[[:space:]]+20' /etc/login.defs"
 check "natasha sudo ไม่ต้องใส่ password" bash -c "su - natasha -c 'sudo -n true'"
+
+echo "== B16 Flatpak =="
+check "มี remote flathub" bash -c "flatpak remotes --system --columns=name | grep -qx flathub"
+check "org.gnome.TextEditor ติดตั้งแบบ system" bash -c "flatpak list --system --app --columns=application | grep -qx org.gnome.TextEditor"
+
+echo "== B17 systemd timer =="
+check "diskreport.timer enabled" systemctl is-enabled diskreport.timer
+check "diskreport.timer active" systemctl is-active diskreport.timer
+check "เวลา Mon..Fri 08:30" bash -c "systemctl show -p TimersCalendar diskreport.timer | grep -q 'OnCalendar=Mon..Fri \*-\*-\* 08:30:00'"
+check "Persistent=true" bash -c "test \"\$(systemctl show -p Persistent --value diskreport.timer)\" = yes"
+check "service เขียน /root/diskreport.txt" bash -c "systemctl start diskreport.service && grep -q Filesystem /root/diskreport.txt"
 
 echo "== ทั่วไป =="
 check "SELinux Enforcing" test "$(getenforce)" = Enforcing

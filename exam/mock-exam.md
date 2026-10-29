@@ -1,4 +1,4 @@
-# ข้อสอบจำลอง RHCSA (EX200) — ชุดที่ 1
+# ข้อสอบจำลอง RHCSA (EX200, RHEL 10) — ชุดที่ 1
 
 **เวลา:** 3 ชั่วโมง  **คะแนนเต็ม:** 300  **ผ่าน:** 210
 
@@ -43,7 +43,7 @@
 - Hostname: `servera.lab.example.com`
 - IP: `192.168.122.10/24`, Gateway: `192.168.122.1`, DNS: `192.168.122.1`
 
-**B2. (10 คะแนน)** ตั้งค่า repository เหมือนข้อ A2
+**B2. (5 คะแนน)** ตั้งค่า repository เหมือนข้อ A2
 
 **B3. (20 คะแนน)** Web server ถูกตั้งให้ทำงานบน port **82** แต่ยังใช้งานไม่ได้ จงแก้ไขให้
 - ไฟล์ HTML ทุกไฟล์ใน `/var/www/html` เข้าถึงได้ผ่าน port 82 จากเครื่องอื่น
@@ -78,20 +78,31 @@
 - `harry` อ่านและเขียนไม่ได้
 - คนอื่นทุกคนอ่านได้
 
-**B10. (10 คะแนน)** สร้าง user `alex` ที่มี UID `3456` password `flectrag`
+**B10. (5 คะแนน)** สร้าง user `alex` ที่มี UID `3456` password `flectrag`
 
 **B11. (10 คะแนน)** หาไฟล์ทุกไฟล์ที่เป็นของ user `harry` แล้ว copy ไปไว้ใน `/root/findfiles` (คง permission เดิม)
 > เตรียมก่อนทำ: `touch /tmp/h1 /var/tmp/h2; chown harry /tmp/h1 /var/tmp/h2`
 
-**B12. (10 คะแนน)** หาทุกบรรทัดในไฟล์ `/usr/share/dict/words` ที่มีคำว่า `ich` แล้วบันทึกลง `/root/lines` (ถ้าไม่มีไฟล์ให้ `dnf install -y words`)
+**B12. (5 คะแนน)** หาทุกบรรทัดในไฟล์ `/usr/share/dict/words` ที่มีคำว่า `ich` แล้วบันทึกลง `/root/lines` (ถ้าไม่มีไฟล์ให้ `dnf install -y words`)
 
-**B13. (10 คะแนน)** สร้าง archive `/root/backup.tar.bz2` ที่เก็บ `/usr/local` บีบอัดด้วย bzip2
+**B13. (5 คะแนน)** สร้าง archive `/root/backup.tar.bz2` ที่เก็บ `/usr/local` บีบอัดด้วย bzip2
 
 **B14. (15 คะแนน)** สร้าง script `/usr/local/bin/myusers`
 - ถ้าไม่มี argument ให้พิมพ์ `Usage: myusers <shell>` และ exit 1
 - ถ้ามี argument ให้พิมพ์ชื่อ user ทุกคนใน `/etc/passwd` ที่ใช้ shell นั้น เช่น `myusers /bin/bash`
 
 **B15. (10 คะแนน)** ตั้งให้ password ของ user ที่สร้างใหม่หลังจากนี้หมดอายุภายใน 20 วัน และให้ group `sysmgrs` ใช้ `sudo` ได้โดยไม่ต้องใส่ password
+
+**B16. (10 คะแนน)** ตั้งค่า Flatpak บน `servera`
+- เพิ่ม remote ชื่อ `flathub` จาก `https://dl.flathub.org/repo/flathub.flatpakrepo`
+- ติดตั้งแอป `org.gnome.TextEditor` ให้ **ทุก user** ใช้ได้
+> ในห้องสอบจริงจะเป็น remote ภายในที่โจทย์ให้ URL มา ใน Lab ใช้ Flathub แทน (ต้องออกอินเทอร์เน็ตได้)
+
+**B17. (10 คะแนน)** สร้าง systemd timer ชื่อ `diskreport.timer`
+- รันคำสั่ง `df -h` แล้วเขียนผลทับลงไฟล์ `/root/diskreport.txt`
+- รันทุกวันจันทร์ถึงศุกร์ เวลา 08:30
+- ถ้าเครื่องปิดอยู่ตอนถึงเวลา ให้รันทันทีที่เปิดเครื่อง
+- ต้องทำงานหลัง reboot
 
 ---
 
